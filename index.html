@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Premium MAMA ENAY SHOP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite linear;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+    <script>
+        // Tautan CSV Aktif Berdasarkan Pengaturan Publikasi Anda
+        const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTESK_x_Ql0-JeZKXd7EiFcH4q3WChes5ska1B_UfJm5RPehScXughSFQ5aM1pfG_83nlZDQJUBD86z/pub?output=csv";
+        
+        // Data Konfigurasi Toko & Hero Banner
+        const CONFIG_SETTINGS = {
+            shopName: "MAMA ENAY SHOP",
+            tagline: "Sembako Lengkap Grosir dan Eceran Harga Terbaik",
+            whatsapp: "6281234567890", 
+            address: "Jl. Raya Cikarang No. 88, Bekasi",
+            heroBannerBg: "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1000&auto=format&fit=crop"
+        };
+    </script>
+
+    <header class="bg-white/80 backdrop-blur-md border-b border-slate-100 sticky top-0 z-40 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-3">
+                    <div class="bg-gradient-to-tr from-teal-600 to-emerald-500 text-white p-2.5 rounded-2xl flex items-center justify-center shadow-lg shadow-teal-100">
+                        <i class="fa-solid fa-store text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-slate-900 tracking-tight text-base sm:text-xl">MAMA ENAY SHOP</h1>
+                        <span class="text-[11px] text-emerald-600 font-bold flex items-center gap-1.5 mt-0.5">
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            </span>
+                            Buka • Online Sesuai Stok
+                        </span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btn-cart" class="relative bg-teal-50 hover:bg-teal-100 text-teal-700 px-4 py-2.5 rounded-xl transition-all duration-300 border border-teal-100 flex items-center gap-2 font-bold text-sm shadow-sm active:scale-95">
+                        <i class="fa-solid fa-shopping-basket text-base"></i>
+                        <span class="hidden sm:inline">Keranjang</span>
+                        <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-amber-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow shadow-amber-200 hidden">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <div id="hero-banner" class="rounded-3xl mb-8 text-white shadow-xl relative overflow-hidden min-h-[220px] sm:min-h-[260px] flex items-center bg-slate-900">
+            <div id="hero-bg-overlay" class="absolute inset-0 bg-cover bg-center opacity-40 transition-transform duration-700 hover:scale-105"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-teal-950 via-teal-900/90 to-transparent"></div>
+            
+            <div class="relative z-10 max-w-2xl px-6 py-8 sm:px-10">
+                <span class="bg-gradient-to-r from-amber-400 to-amber-500 text-teal-950 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider mb-3 inline-block shadow-sm">👑 Belanja Grosir & Eceran</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-2 drop-shadow-sm">MAMA ENAY SHOP</h2>
+                <p class="text-teal-100/90 text-sm sm:text-base font-medium mb-4 max-w-md">Sembako Lengkap Grosir dan Eceran Harga Terbaik</p>
+                <div class="flex flex-col gap-y-2 text-xs sm:text-sm text-teal-100/80 border-t border-teal-800/60 pt-3">
+                    <span class="flex items-start gap-2"><i class="fa-solid fa-location-dot text-amber-400 mt-0.5 flex-shrink-0"></i> <span>Jl. Raya Cikarang No. 88, Bekasi</span></span>
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-phone text-amber-400 flex-shrink-0"></i> +62 812-3456-7890</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading-state" class="space-y-6">
+            <div class="flex flex-col md:flex-row gap-4 justify-between items-stretch">
+                <div class="w-full max-w-xl h-12 skeleton rounded-xl"></div>
+                <div class="flex gap-2 overflow-x-auto pb-2"><div class="w-24 h-9 skeleton rounded-full"></div><div class="w-24 h-9 skeleton rounded-full"></div><div class="w-24 h-9 skeleton rounded-full"></div></div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="border border-slate-200/60 rounded-2xl p-3 bg-white space-y-3"><div class="h-40 skeleton rounded-xl w-full"></div><div class="h-4 skeleton rounded-md w-1/3"></div><div class="h-5 skeleton rounded-md w-3/4"></div><div class="h-8 skeleton rounded-xl w-full mt-4"></div></div>
+                <div class="border border-slate-200/60 rounded-2xl p-3 bg-white space-y-3"><div class="h-40 skeleton rounded-xl w-full"></div><div class="h-4 skeleton rounded-md w-1/3"></div><div class="h-5 skeleton rounded-md w-3/4"></div><div class="h-8 skeleton rounded-xl w-full mt-4"></div></div>
+            </div>
+        </div>
+
+        <div id="customer-view" class="space-y-6 hidden">
+            <div class="flex flex-col md:flex-row gap-4 justify-between items-stretch bg-white p-3 rounded-2xl border border-slate-100 shadow-sm">
+                <div class="relative flex-grow max-w-xl">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="search-input" placeholder="Cari beras, minyak, terigu, mie instan..." class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-transparent rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white shadow-inner text-sm transition-all duration-200">
+                </div>
+                <div id="category-filters" class="flex gap-2 overflow-x-auto pb-1 md:pb-0 items-center no-scrollbar"></div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between mb-5">
+                    <h3 class="font-extrabold text-slate-900 text-base sm:text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-boxes-stacked text-teal-600"></i> Etalase Produk
+                    </h3>
+                    <span id="product-count" class="text-xs bg-slate-100 text-slate-600 font-bold px-3 py-1 rounded-full border border-slate-200/60">0 Produk</span>
+                </div>
+                
+                <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"></div>
+
+                <div id="empty-state" class="hidden flex-col items-center justify-center text-center py-20 bg-white rounded-3xl border border-slate-100 shadow-sm mt-4">
+                    <div class="bg-slate-50 p-5 rounded-full text-slate-400 mb-4 text-4xl shadow-inner">
+                        <i class="fa-regular fa-folder-open text-teal-500"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-800 mb-1">Produk Tidak Ditemukan</h4>
+                    <p class="text-slate-500 text-xs max-w-xs px-4">Silakan masukkan kata kunci lain atau pilih kategori produk yang berbeda.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden" role="dialog" aria-modal="true">
+        <div class="absolute inset-0 overflow-hidden">
+            <div id="cart-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300 opacity-0"></div>
+            <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-4 sm:pl-10">
+                <div id="cart-panel" class="pointer-events-auto w-screen max-w-md transform translate-x-full transition-transform duration-300 ease-in-out">
+                    <div class="flex h-full flex-col bg-white shadow-2xl rounded-l-2xl border-l border-slate-100">
+                        
+                        <div class="flex items-center justify-between border-b border-slate-100 px-5 py-5">
+                            <h2 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-basket-shopping text-teal-600"></i> Detail Pesanan
+                            </h2>
+                            <button id="btn-close-cart" class="text-slate-400 hover:text-slate-600 p-2 rounded-xl hover:bg-slate-50 transition-colors">
+                                <i class="fa-solid fa-xmark text-lg"></i>
+                            </button>
+                        </div>
+
+                        <div class="flex-1 overflow-y-auto py-4 px-5 space-y-6">
+                            <div>
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3"><i class="fa-solid fa-list-check mr-1"></i> Produk yang dibeli</h3>
+                                <ul id="cart-items-list" class="divide-y divide-slate-100"></ul>
+                                
+                                <div id="cart-empty-state" class="hidden text-center py-16 text-slate-400 flex flex-col items-center">
+                                    <div class="w-16 h-16 bg-slate-50 flex items-center justify-center rounded-full text-slate-300 mb-3 shadow-inner">
+                                        <i class="fa-solid fa-shopping-cart text-2xl text-teal-500/60"></i>
+                                    </div>
+                                    <h4 class="font-bold text-slate-700 mb-1 text-sm">Keranjang Belanja Kosong</h4>
+                                    <p class="text-xs text-slate-400 max-w-xs px-6">Pilih produk berkualitas di katalog kami terlebih dahulu.</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-50 border border-slate-200/60 rounded-2xl p-4 space-y-4">
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5 border-b border-slate-200 pb-2">
+                                    <i class="fa-solid fa-truck-fast text-teal-600"></i> Informasi Pengiriman & Nota
+                                </h3>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap Penerima *</label>
+                                    <input type="text" id="cust-name" placeholder="Contoh: Ibu Siti Aminah" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WhatsApp Anda *</label>
+                                    <input type="tel" id="cust-phone" placeholder="Contoh: 08123456789" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-700 mb-1">Alamat Pengiriman Lengkap *</label>
+                                    <textarea id="cust-address" rows="3" placeholder="Nama Jalan, Blok, RT/RW, Patokan Rumah..." class="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-slate-100 px-5 py-5 bg-slate-50 rounded-b-2xl">
+                            <div class="flex justify-between text-slate-900 mb-4">
+                                <p class="text-sm font-semibold text-slate-600">Total Estimasi Belanja</p>
+                                <p id="cart-total-price" class="text-lg font-black text-teal-600">Rp0</p>
+                            </div>
+                            <button id="btn-checkout" class="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg hover:shadow-teal-100 transition-all active:scale-95 duration-200">
+                                <i class="fa-brands fa-whatsapp text-lg"></i> Kirim Nota via WhatsApp Toko
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 pointer-events-none w-full max-w-xs px-4"></div>
+
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 text-center mt-12">
+        <p class="mb-1">© 2026 <strong class="text-white">MAMA ENAY SHOP</strong>. Seluruh Hak Cipta Dilindungi.</p>
+    </footer>
+
+    <script>
+        let products = [];
+        let cart = [];
+        let currentCategory = "Semua";
+        let searchQuery = "";
+
+        document.getElementById('hero-bg-overlay').style.backgroundImage = `url('${CONFIG_SETTINGS.heroBannerBg}')`;
+
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(number);
+        }
+
+        function showToast(message, type = "success") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `px-4 py-3 rounded-xl shadow-xl text-white font-bold text-xs flex items-center gap-2.5 transition-all duration-300 transform translate-y-2 pointer-events-auto bg-slate-900/95 border border-slate-800/50 backdrop-blur-md`;
+            
+            if(type === 'success') {
+                toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i> <span class="flex-grow">${message}</span>`;
+            } else {
+                toast.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-400 text-sm"></i> <span class="flex-grow">${message}</span>`;
+            }
+            
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.remove('translate-y-2'); }, 10);
+            setTimeout(() => { 
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-10px)';
+                setTimeout(() => { toast.remove(); }, 300);
+            }, 3000);
+        }
+
+        function loadCustomerData() {
+            if(localStorage.getItem('sembako_cust_name')) document.getElementById('cust-name').value = localStorage.getItem('sembako_cust_name');
+            if(localStorage.getItem('sembako_cust_phone')) document.getElementById('cust-phone').value = localStorage.getItem('sembako_cust_phone');
+            if(localStorage.getItem('sembako_cust_address')) document.getElementById('cust-address').value = localStorage.getItem('sembako_cust_address');
+        }
+
+        function saveCustomerData() {
+            localStorage.setItem('sembako_cust_name', document.getElementById('cust-name').value.trim());
+            localStorage.setItem('sembako_cust_phone', document.getElementById('cust-phone').value.trim());
+            localStorage.setItem('sembako_cust_address', document.getElementById('cust-address').value.trim());
+        }
+
+        function parseCSV(text) {
+            let r = [];
+            let q = false;
+            let l = [''];
+            const firstLine = text.split('\n')[0];
+            const separator = firstLine.includes(';') ? ';' : ',';
+
+            for (let i = 0; i < text.length; i++) {
+                let c = text[i];
+                let next = text[i+1];
+                if (c === '"') { 
+                    if (q && next === '"') { l[l.length - 1] += '"'; i++; } 
+                    else { q = !q; }
+                } else if (c === separator && !q) { 
+                    l.push(''); 
+                } else if ((c === '\r' || c === '\n') && !q) {
+                    if (c === '\r' && next === '\n') { i++; }
+                    r.push(l);
+                    l = [''];
+                } else { 
+                    l[l.length - 1] += c; 
+                }
+            }
+            if (l.length > 1 || l[0] !== '') { r.push(l); }
+            return r;
+        }
+
+        async function fetchProductsFromSheets() {
+            try {
+                const response = await fetch(GOOGLE_SHEET_CSV_URL);
+                if (!response.ok) throw new Error("Gagal terhubung dengan file Google Sheets.");
+                const rawData = await response.text();
+                
+                const csvRows = parseCSV(rawData.trim());
+                if(csvRows.length < 2) throw new Error("File spreadsheet terdeteksi kosong.");
+
+                // FIXED LOGIC: Pencarian nama kolom super fleksibel tanpa manipulasi berlebih
+                const headers = csvRows[0].map(h => h.trim().toLowerCase());
+                
+                const idxId = headers.findIndex(h => h.includes('id') || h.includes('kode'));
+                const idxName = headers.findIndex(h => h.includes('name') || h.includes('nama') || h.includes('produk'));
+                const idxCat = headers.findIndex(h => h.includes('cat') || h.includes('kat'));
+                const idxPrice = headers.findIndex(h => h.includes('price') || h.includes('harga') || h.includes('jual'));
+                const idxStock = headers.findIndex(h => h.includes('stock') || h.includes('stok') || h.includes('jumlah'));
+                const idxImg = headers.findIndex(h => h.includes('img') || h.includes('image') || h.includes('foto') || h.includes('gambar'));
+                const idxDesc = headers.findIndex(h => h.includes('desc') || h.includes('deskripsi') || h.includes('detail'));
+
+                if (idxName === -1) throw new Error("Judul kolom nama produk tidak dikenali oleh sistem.");
+
+                const parsedProducts = [];
+                
+                for(let i = 1; i < csvRows.length; i++) {
+                    const row = csvRows[i];
+                    if (!row[idxName] || row[idxName].trim() === "") continue;
+                    
+                    let idProduk = idxId !== -1 && row[idxId] ? row[idxId].trim() : `PROD-${i}`;
+
+                    let cleanedPrice = 0;
+                    if(idxPrice !== -1 && row[idxPrice]) {
+                        cleanedPrice = parseFloat(row[idxPrice].replace(/[^0-9]/g, '')) || 0;
+                    }
+
+                    let cleanedStock = 99;
+                    if(idxStock !== -1 && row[idxStock]) {
+                        cleanedStock = parseInt(row[idxStock].replace(/[^0-9]/g, ''));
+                        if (isNaN(cleanedStock)) cleanedStock = 99;
+                    }
+
+                    parsedProducts.push({
+                        id: idProduk,
+                        name: row[idxName].trim(),
+                        category: idxCat !== -1 && row[idxCat] ? row[idxCat].trim() : "Umum",
+                        price: cleanedPrice,
+                        stock: cleanedStock,
+                        image: idxImg !== -1 && row[idxImg] ? row[idxImg].trim() : "",
+                        desc: idxDesc !== -1 && row[idxDesc] ? row[idxDesc].trim() : "-"
+                    });
+                }
+                
+                products = parsedProducts;
+                
+                if(products.length === 0) throw new Error("Baris data produk tidak terbaca.");
+
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('customer-view').classList.remove('hidden');
+                
+                renderCategoryFilters();
+                renderCatalog();
+                loadCustomerData();
+            } catch (error) {
+                console.error(error);
+                document.getElementById('loading-state').innerHTML = `
+                    <div class="text-rose-600 text-center py-10 px-4 bg-white border border-slate-100 rounded-3xl shadow-sm">
+                        <i class="fa-solid fa-circle-exclamation text-5xl mb-4 text-rose-500"></i>
+                        <p class="font-extrabold text-slate-800 text-base">Katalog Gagal Dimuat</p>
+                        <p class="text-xs text-slate-400 max-w-sm mx-auto mt-1">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderCategoryFilters() {
+            const container = document.getElementById('category-filters');
+            const categories = ["Semua", ...new Set(products.map(p => p.category).filter(Boolean))];
+            
+            container.innerHTML = categories.map(cat => {
+                const isActive = currentCategory === cat;
+                return `
+                    <button onclick="setCategory('${cat}')" class="flex-shrink-0 px-4 py-2 rounded-full text-xs font-bold border transition-all duration-300 ${isActive ? 'bg-teal-600 text-white border-teal-600 shadow-md shadow-teal-100' : 'bg-slate-50 border-slate-200/60 text-slate-600 hover:bg-slate-100'}">
+                        ${cat}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function setCategory(category) {
+            currentCategory = category;
+            renderCategoryFilters();
+            renderCatalog();
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('product-grid');
+            const emptyState = document.getElementById('empty-state');
+            
+            const filtered = products.filter(p => {
+                const matchesCategory = currentCategory === "Semua" || p.category === currentCategory;
+                const matchesSearch = p.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      p.category?.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            document.getElementById('product-count').innerText = `${filtered.length} Produk`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = "";
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = filtered.map(prod => {
+                const cartItem = cart.find(item => item.id === prod.id);
+                const count = cartItem ? cartItem.qty : 0;
+                
+                const fallbackImg = `https://placehold.co/400x400/0d9488/ffffff?text=${encodeURIComponent(prod.name.substring(0, 15))}`;
+                const finalImg = prod.image && prod.image.startsWith('http') ? prod.image : fallbackImg;
+
+                return `
+                    <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
+                        <div>
+                            <div class="h-40 bg-slate-50 relative overflow-hidden flex items-center justify-center">
+                                <img src="${finalImg}" alt="${prod.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                                ${prod.stock <= 5 && prod.stock > 0 ? `<span class="absolute top-2 left-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-sm">Stok Sisa ${prod.stock}</span>` : ''}
+                                ${prod.stock <= 0 ? `<div class="absolute inset-0 bg-slate-900/60 backdrop-blur-[1px] flex items-center justify-center text-white font-extrabold text-xs tracking-wider uppercase">Habis</div>` : ''}
+                            </div>
+                            <div class="p-3.5">
+                                <span class="text-[9px] bg-teal-50 text-teal-700 font-extrabold px-2 py-0.5 rounded-md uppercase tracking-wider">${prod.category}</span>
+                                <h4 class="font-bold text-slate-800 text-xs sm:text-sm mt-1.5 line-clamp-2 h-10 group-hover:text-teal-600 transition-colors">${prod.name}</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-1">${prod.desc}</p>
+                            </div>
+                        </div>
+                        <div class="p-3.5 pt-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                                <span class="font-black text-teal-600 text-sm sm:text-base">${formatRupiah(prod.price)}</span>
+                            </div>
+                            ${prod.stock <= 0 ? `
+                                <button disabled class="bg-slate-100 text-slate-400 w-full sm:w-8 h-8 rounded-xl flex items-center justify-center cursor-not-allowed"><i class="fa-solid fa-ban text-xs"></i></button>
+                            ` : (count > 0 ? `
+                                <div class="flex items-center justify-between gap-2 bg-teal-50 border border-teal-200 rounded-xl px-1.5 py-1 w-full sm:w-auto shadow-sm">
+                                    <button onclick="decrementCart('${prod.id}')" class="w-5 h-5 rounded-lg bg-teal-600 text-white font-bold text-xs flex items-center justify-center shadow-sm active:scale-90 transition-transform">-</button>
+                                    <span class="font-extrabold text-xs text-teal-800 px-1">${count}</span>
+                                    <button onclick="incrementCart('${prod.id}')" class="w-5 h-5 rounded-lg bg-teal-600 text-white font-bold text-xs flex items-center justify-center shadow-sm active:scale-90 transition-transform">+</button>
+                                </div>
+                            ` : `
+                                <button onclick="addToCart('${prod.id}')" class="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-200 active:scale-90 shadow-md shadow-teal-100">
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                </button>
+                            `)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addToCart(productId) {
+            const prod = products.find(p => p.id === productId);
+            if (!prod || prod.stock <= 0) return;
+
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                if (existing.qty < prod.stock) {
+                    existing.qty++;
+                } else {
+                    showToast("Batas stok maksimum toko tercapai", "error");
+                    return;
+                }
+            } else {
+                cart.push({ id: prod.id, name: prod.name, price: prod.price, qty: 1 });
+            }
+            showToast(`${prod.name} masuk keranjang`);
+            renderCatalog();
+            updateCartBadge();
+            renderCartList();
+        }
+
+        function incrementCart(productId) {
+            const item = cart.find(c => c.id === productId);
+            const prod = products.find(p => p.id === productId);
+            if (item && prod && item.qty < prod.stock) {
+                item.qty++;
+                renderCatalog();
+                updateCartBadge();
+                renderCartList();
+            } else {
+                showToast("Batas stok maksimum toko tercapai", "error");
+            }
+        }
+
+        function decrementCart(productId) {
+            const index = cart.findIndex(c => c.id === productId);
+            if (index !== -1) {
+                if (cart[index].qty > 1) {
+                    cart[index].qty--;
+                } else {
+                    cart.splice(index, 1);
+                }
+                renderCatalog();
+                updateCartBadge();
+                renderCartList();
+            }
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-badge');
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            if (totalQty > 0) {
+                badge.innerText = totalQty;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function renderCartList() {
+            const list = document.getElementById('cart-items-list');
+            const emptyState = document.getElementById('cart-empty-state');
+            const totalElement = document.getElementById('cart-total-price');
+            
+            if (cart.length === 0) {
+                list.innerHTML = "";
+                emptyState.classList.remove('hidden');
+                totalElement.innerText = "Rp0";
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            let total = 0;
+
+            list.innerHTML = cart.map(item => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                return `
+                    <li class="flex items-center justify-between py-4 border-b border-slate-100 last:border-0">
+                        <div class="pr-4 flex-grow">
+                            <h5 class="font-bold text-slate-800 text-xs sm:text-sm line-clamp-2">${item.name}</h5>
+                            <p class="text-[11px] text-teal-600 font-extrabold mt-1">${formatRupiah(item.price)} <span class="text-slate-400 font-normal">x ${item.qty}</span></p>
+                        </div>
+                        <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+                            <span class="font-black text-slate-900 text-xs sm:text-sm">${formatRupiah(subtotal)}</span>
+                            <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 p-0.5 rounded-lg scale-90">
+                                <button onclick="decrementCart('${item.id}')" class="w-4 h-4 bg-white hover:bg-slate-100 text-slate-700 rounded flex items-center justify-center font-bold text-[10px] border border-slate-200">-</button>
+                                <span class="text-[10px] font-bold px-1 text-slate-700">${item.qty}</span>
+                                <button onclick="incrementCart('${item.id}')" class="w-4 h-4 bg-white hover:bg-slate-100 text-slate-700 rounded flex items-center justify-center font-bold text-[10px] border border-slate-200">+</button>
+                            </div>
+                        </div>
+                    </li>
+                `;
+            }).join('');
+
+            totalElement.innerText = formatRupiah(total);
+        }
+
+        const cartDrawer = document.getElementById('cart-drawer');
+        const cartPanel = document.getElementById('cart-panel');
+        const cartBackdrop = document.getElementById('cart-backdrop');
+
+        function openCart() {
+            cartDrawer.classList.remove('hidden');
+            setTimeout(() => {
+                cartBackdrop.classList.remove('opacity-0');
+                cartBackdrop.classList.add('opacity-100');
+                cartPanel.classList.remove('translate-x-full');
+            }, 10);
+        }
+
+        function closeCart() {
+            cartBackdrop.classList.remove('opacity-100');
+            cartBackdrop.classList.add('opacity-0');
+            cartPanel.classList.add('translate-x-full');
+            setTimeout(() => { cartDrawer.classList.add('hidden'); }, 300);
+        }
+
+        document.getElementById('btn-cart').addEventListener('click', openCart);
+        document.getElementById('btn-close-cart').addEventListener('click', closeCart);
+        cartBackdrop.addEventListener('click', closeCart);
+
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            searchQuery = e.target.value.trim();
+            renderCatalog();
+        });
+
+        document.getElementById('cust-name').addEventListener('input', saveCustomerData);
+        document.getElementById('cust-phone').addEventListener('input', saveCustomerData);
+        document.getElementById('cust-address').addEventListener('input', saveCustomerData);
+
+        document.getElementById('btn-checkout').addEventListener('click', () => {
+            if (cart.length === 0) {
+                showToast("Keranjang belanja Anda masih kosong", "error");
+                return;
+            }
+
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+
+            if (!name || !phone || !address) {
+                showToast("Mohon lengkapi seluruh Informasi Pengiriman wajib (*)", "error");
+                return;
+            }
+
+            let message = `*NOTA PESANAN - ${CONFIG_SETTINGS.shopName}*\n`;
+            message += `--------------------------------------------------\n`;
+            message += `*Nama Penerima:* ${name}\n`;
+            message += `*No. WhatsApp:* ${phone}\n`;
+            message += `*Alamat Kirim:* ${address}\n`;
+            message += `--------------------------------------------------\n\n`;
+            message += `*DAFTAR BELANJA:*\n`;
+
+            let total = 0;
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                message += `${index + 1}. ${item.name}\n`;
+                message += `    ${item.qty} x ${formatRupiah(item.price)} = *${formatRupiah(subtotal)}*\n`;
+            });
+
+            message += `\n--------------------------------------------------\n`;
+            message += `*TOTAL ESTIMASI:* *${formatRupiah(total)}*\n\n`;
+            message += `_Mohon ditunggu konfirmasi admin untuk ketersediaan stok fisik & ongkos kirim. Terima kasih!_`;
+
+            const waUrl = `https://api.whatsapp.com/send?phone=${CONFIG_SETTINGS.whatsapp}&text=${encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
+        });
+
+        window.addEventListener('DOMContentLoaded', fetchProductsFromSheets);
+    </script>
+</body>
+</html>
